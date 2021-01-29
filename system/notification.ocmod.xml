@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>Оповещение клиентов</name>
+  <code>notification_module</code>
+  <version>1</version>
+  <author>Pavel666</author>
+  <link>mailto:mr.terks@yandex.ru</link>
+  <file path="admin/controller/startup/permission.php">
+    <operation>
+      <search><![CDATA['extension/dashboard',]]></search>
+      <add position="after"><![CDATA[
+        'service/notification',
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/model/checkout/order.php">
+    <operation>
+      <search><![CDATA[public function addOrderHistory(]]></search>
+      <add position="after"><![CDATA[
+        $this->load->controller('service/notif/beforeOrderHistory', [
+          $order_id,
+          $order_status_id,
+          $comment
+        ]);
+      ]]></add>
+    </operation>
+  </file>
+  <file path="catalog/model/account/customer.php">
+    <operation>
+      <search><![CDATA[return $customer_id;]]></search>
+      <add position="before"><![CDATA[
+        $this->load->controller('service/notif/afterAddCustomer', [
+          $data,
+          $customer_id
+        ]);
+      ]]></add>
+    </operation>
+  </file>
+</modification>

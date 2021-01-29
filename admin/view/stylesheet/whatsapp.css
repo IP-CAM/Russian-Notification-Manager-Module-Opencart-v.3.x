@@ -1,0 +1,216 @@
+.clearfix{
+    display: block;
+    clear: both;
+}
+
+.flex{
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+}
+.f-column{
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+.f-ai{
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.f-jc{
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+.pull-left{
+	margin-right: auto !important;
+}
+.pull-right{
+	margin-left: auto !important;
+}
+
+body{
+    background: #ededed;
+}
+
+.chat img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    border-radius: 100%;
+}
+
+.chat-info > :first-child {
+    font-size: 17px;
+}
+
+.chat-info > :last-child {
+    font-size: 13px;
+}
+
+.chat-info > :first-child span {
+    font-size: 12px;
+    opacity: .6;
+}
+
+a.back-link {
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+.h-100{
+    height: 100%;
+}
+
+.chat {
+    padding: 10px;
+    background: #FFF;
+    position: relative;
+    cursor: pointer;
+}
+
+.chat:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 80%;
+    border-bottom: 1px solid gainsboro;
+}
+
+.chat-info {
+    width: calc(100% - 50px);
+}
+
+.brr{
+    border-right: 1px solid gainsboro;
+}
+
+[data="chats"]{
+    background: #fff;
+}
+
+.messages-body,[data="messages"] {
+    position: relative;
+}
+
+[data="messages"]{
+    padding-right: 15px !important;
+}
+
+.messages-body{
+    padding-top: 10px;
+    padding-right: 0;
+    padding-bottom: 80px;
+    background: #e5ddd5;
+}
+
+video.ptt {
+    max-height: 40px;
+    width: 100%;
+}
+
+.chat.active{
+    background: #ebebeb;
+}
+
+[data="messages"] > * {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 10px;
+}
+
+body .messages-body:before {
+    background: url(/image/bg-chat-tile-light.png);
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: .2;
+    z-index: 0;
+}
+
+body .date {
+    background: #e0f3fa;
+    width: 50px;
+    text-align: center;
+    border-radius: 7.5px;
+    box-shadow: 0 1px 0.5px gainsboro;
+    padding: 5px 10px;
+    margin-left: auto;
+    margin-right: auto;
+    position: sticky;
+    top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+body .message-form {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: #f0f0f0;
+}
+
+.message.pull-left {
+    background: #FFF;
+}
+
+.time {
+    font-size: 12px;
+    opacity: .6;
+    margin-left: 15px;
+}
+
+.message {
+    padding: 6px 7px 8px 9px;
+    background: #FFF;
+    border-radius: 5px;
+    box-shadow: 0 1px .5px gainsboro;
+    font-size: 14.2px;
+    line-height: 19px;
+    max-width: 70%;
+}
+
+.message.pull-right {
+    background: #dcf8c6;
+}
+
+img.message-image {
+    max-width: 100%;
+}
+
+.message-input {
+    padding: 9px 12px 11px;
+    margin: 5px 10px;
+    background-color: #FFF;
+    border: #FFF;
+    border-radius: 21px;
+    height: 50px !important;
+}
+
+button#submit {
+    background: url(/image/pic_036.png) no-repeat;
+    background-size: 100%;
+    background-position: center;
+    border: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    opacity: .6;
+}
+
+button#submit:hover {
+    opacity: 1;
+}
+
+.whatsapp{
+    max-height: 100vh;
+    overflow: hidden;
+}
