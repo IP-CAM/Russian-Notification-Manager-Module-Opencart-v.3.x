@@ -1,22 +1,22 @@
-<?php echo $header; ?>
+{{ header }}
 <script>
-  var provider_info = <?php echo json_encode($provider_info); ?>;
+  var provider_info = {{ provider_info }};
   if(!provider_info){provider_info = {};}
-  var provider_form = <?php echo json_encode($provider_form); ?>;
-  var provider = '<?php echo $provider; ?>';
+  var provider_form = {{ provider_form }};
+  var provider = '{{ provider }}';
 </script>
 
-<?php echo $column_left; ?>
+{{ column_left }}
 <div id="content">
   <div class="page-header">
     <div class="container-fluid">
       <div class="pull-right">
-        <button type="submit" form="form-notification" data-toggle="tooltip" title="<?php echo $button_save; ?>" class="btn btn-primary"><i class="fa fa-save"></i></button>
-        <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+        <button type="submit" form="form-notification" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
       <ul class="breadcrumb">
-        <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-        <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
-        <?php } ?>
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
       </ul>
     </div>
   </div>
@@ -24,40 +24,40 @@
 
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_edit; ?></h3>
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
       </div>
       <div class="panel-body">
-        <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-notification" class="form-horizontal">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-notification" class="form-horizontal">
 
 
           <div class="form-group">
-            <label class="col-sm-2 control-label" ><?php echo $entry_status; ?></label>
+            <label class="col-sm-2 control-label" >{{ entry_status }}</label>
             <div class="col-sm-10">
               <select name="status" class="form-control">
-                <?php if ($status) { ?>
-                <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
-                <option value="0"><?php echo $text_disabled; ?></option>
-                <?php } else { ?>
-                <option value="1"><?php echo $text_enabled; ?></option>
-                <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
-                <?php } ?>
+                {% if status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
               </select>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="col-sm-2 control-label" ><?php echo $text_provider; ?></label>
+            <label class="col-sm-2 control-label" >{{ text_provider }}</label>
             <div class="col-sm-10">
               <select name="provider" class="form-control">
-                <option value="0"><?php echo $text_selects; ?></option>
-                <?php foreach($providers as $_provider){ ?>
-                  <option value="<?php echo $_provider; ?>" <?php echo($provider == $_provider ? 'selected' : ''); ?> ><?php echo $_provider; ?></option>
-                <?php } ?>
+                <option value="0">{{ text_selects }}</option>
+                {% for _provider in providers %}
+                  <option value="{{ _provider }}" {% if provider == _provider %}selected{% endif %} >{{ _provider }}</option>
+                {% endfor %}
               </select>
-              <?php if($provider == 'whatsapp'){ ?>
+              {% if provider == 'whatsapp' %}
                 <br>
-                <a href="<?php echo $open_whatsapp; ?>" target="_blank" class="btn btn-default"><?php echo $text_open_whatsapp; ?></a>
-              <?php } ?>
+                <a href="{{ open_whatsapp }}" target="_blank" class="btn btn-default">{{ text_open_whatsapp }}</a>
+              {% endif %}
             </div>
           </div>
 
@@ -67,70 +67,71 @@
           <div class="form-group flex f-column">
 
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab-customer" data-toggle="tab"><?php echo $text_customer; ?></a></li>
-              <li><a href="#tab-admin" data-toggle="tab"><?php echo $text_admin; ?></a></li>
+              <li class="active"><a href="#tab-customer" data-toggle="tab">{{ text_customer }}</a></li>
+              <li><a href="#tab-admin" data-toggle="tab">{{ text_admin }}</a></li>
             </ul>
 						<div class="tab-content">
 							<div class="tab-pane active flex" id="tab-customer">
 
 
                 <div class="order_statuses flex f-column col-sm-2">
-                  <div class="head"><?php echo $notify_about; ?></div>
+                  <div class="head">{{ notify_about }}</div>
 
                   <div class="order_status flex f-ai" data-key="new_order">
-                    <input type="checkbox" name="new_order[status]" <?php echo (isset($new_order['status']) && $new_order['status'] ? 'checked' : ''); ?> value="1" >
+                    <input type="checkbox" name="new_order[status]" {% if new_order.status %}checked{% endif %} value="1" >
                     <span class="checkbox"></span>
-                    <span><?php echo $text_new_order; ?></span>
+                    <span>{{ text_new_order }}</span>
                   </div>
 
-                  <?php foreach($order_statuses as $order_status){ ?>
-                    <?php $key = "order_status_" . $order_status['order_status_id']; ?>
-                    <div class="order_status flex f-ai" data-key="<?php echo $key; ?>">
-                      <input type="checkbox" name="<?php echo $key; ?>[status]" <?php echo (isset(${$key}['status']) && ${$key}['status'] ? 'checked' : ''); ?> value="1" >
+                  {% for order_status in order_statuses %}
+                    {% set key = "order_status_" ~ order_status.order_status_id %}
+                    {% set info = data[key] %}
+                    <div class="order_status flex f-ai" data-key="{{ key }}">
+                      <input type="checkbox" name="{{ key }}[status]" {% if info.status %}checked{% endif %} value="1" >
                       <span class="checkbox"></span>
-                      <span><?php echo $order_status['name']; ?></span>
+                      <span>{{ order_status.name }}</span>
                     </div>
-                  <?php } ?>
+                  {% endfor %}
 
                   <div class="order_status flex f-ai" data-key="register_customer">
-                    <input type="checkbox" name="register_customer[status]" <?php echo (isset($register_customer['status']) && $register_customer['status'] ? 'checked' : ''); ?> value="1" >
+                    <input type="checkbox" name="register_customer[status]" {% if register_customer.status %}checked{% endif %} value="1" >
                     <span class="checkbox"></span>
-                    <span><?php echo $text_register; ?></span>
+                    <span>{{ text_register }}</span>
                   </div>
                 </div>
 
                 <div class="order_status_forms col-sm-10">
                   <div class="order_status_form hidden" data-key="new_order">
                       <div class="head flex f-wrap">
-                        <?php foreach($short_codes as $code => $name){ ?>
-                          <a href="#" data-code="<?php echo $code; ?>" class="copy"><?php echo $name; ?></a>
-                        <?php } ?>
+                        {% for code, name in short_codes %}
+                          <a href="#" data-code="{{ code }}" class="copy">{{ name }}</a>
+                        {% endfor %}
                       </div>
-                      <textarea name="new_order[message]" placeholder="<?php echo $text_new_order; ?>" class="form-control first"><?php echo (isset($new_order['message']) ? $new_order['message'] : ''); ?></textarea>
+                      <textarea name="new_order[message]" placeholder="{{ text_new_order }}" class="form-control first">{{ new_order.message }}</textarea>
                       <textarea readonly class="form-control last"></textarea>
                   </div>
 
-
-                  <?php foreach($order_statuses as $order_status){ ?>
-                    <?php $key = "order_status_" . $order_status['order_status_id']; ?>
-                    <div class="order_status_form hidden" data-key="<?php echo $key; ?>">
+                  {% for order_status in order_statuses %}
+                    {% set key = "order_status_" ~ order_status.order_status_id %}
+                    {% set info = data[key] %}
+                    <div class="order_status_form hidden" data-key="{{ key }}">
                       <div class="head flex f-wrap">
-                        <?php foreach($short_codes as $code => $name){ ?>
-                          <a href="#" data-code="<?php echo $code; ?>" class="copy"><?php echo $name; ?></a>
-                        <?php } ?>
+                        {% for code, name in short_codes %}
+                          <a href="#" data-code="{{ code }}" class="copy">{{ name }}</a>
+                        {% endfor %}
                       </div>
-                      <textarea name="<?php echo $key; ?>[message]" placeholder="<?php echo $order_status['name']; ?>" class="form-control first"><?php echo (isset(${$key}['message']) ? ${$key}['message'] : ''); ?></textarea>
+                      <textarea name="{{ key }}[message]" placeholder="{{ order_status.name }}" class="form-control first">{{ info.message }}</textarea>
                       <textarea readonly class="form-control last"></textarea>
                     </div>
-                  <?php } ?>
+                  {% endfor %}
 
                   <div class="order_status_form hidden" data-key="register_customer">
                     <div class="head flex f-wrap">
-                      <?php foreach($short_codes_customer as $code => $name){ ?>
-                        <a href="#" data-code="<?php echo $code; ?>" class="copy"><?php echo $name; ?></a>
-                      <?php } ?>
+                      {% for code, name in short_codes_customer %}
+                        <a href="#" data-code="{{ code }}" class="copy">{{ name }}</a>
+                      {% endfor %}
                     </div>
-                    <textarea name="register_customer[message]" placeholder="<?php echo $text_register; ?>" class="form-control first"><?php echo (isset($register_customer['message']) ? $register_customer['message'] : ''); ?></textarea>
+                    <textarea name="register_customer[message]" placeholder="{{ text_register }}" class="form-control first">{{ register_customer.message }}</textarea>
                     <textarea readonly class="form-control last"></textarea>
                   </div>
                 </div>
@@ -139,69 +140,70 @@
               <div class="tab-pane flex" id="tab-admin">
                 
                 <div class="form-group">
-                  <label class="col-sm-2 control-label"><?php echo $text_admin_phones; ?></label>
+                  <label class="col-sm-2 control-label">{{ text_admin_phones }}</label>
                   <div class="col-sm-10">
-                    <input name="admin_phones" class="form-control" value="<?php echo $admin_phones; ?>">
+                    <input name="admin_phones" class="form-control" value="{{ admin_phones }}">
                   </div>
                 </div>
 
                 <div class="order_statuses flex f-column col-sm-2">
-                  <div class="head"><?php echo $notify_about; ?></div>
+                  <div class="head">{{ notify_about }}</div>
 
                   <div class="order_status flex f-ai" data-key="admin_new_order">
-                    <input type="checkbox" name="admin_new_order[status]" <?php echo (isset($admin_new_order['status']) && $admin_new_order['status'] ? 'checked' : ''); ?> value="1" >
+                    <input type="checkbox" name="admin_new_order[status]" {% if admin_new_order.status %}checked{% endif %} value="1" >
                     <span class="checkbox"></span>
-                    <span><?php echo $text_new_order; ?></span>
+                    <span>{{ text_new_order }}</span>
                   </div>
 
-                  <?php foreach($order_statuses as $order_status){ ?>
-                    <?php $key = "admin_order_status_" . $order_status['order_status_id']; ?>
-                    <div class="order_status flex f-ai" data-key="<?php echo $key; ?>">
-                      <input type="checkbox" name="<?php echo $key; ?>[status]" <?php echo (isset(${$key}['status']) && ${$key}['status'] ? 'checked' : ''); ?> value="1" >
+                  {% for order_status in order_statuses %}
+                    {% set key = "admin_order_status_" ~ order_status.order_status_id %}
+                    {% set info = data[key] %}
+                    <div class="order_status flex f-ai" data-key="{{ key }}">
+                      <input type="checkbox" name="{{ key }}[status]" {% if info.status %}checked{% endif %} value="1" >
                       <span class="checkbox"></span>
-                      <span><?php echo $order_status['name']; ?></span>
+                      <span>{{ order_status.name }}</span>
                     </div>
-                  <?php } ?>
+                  {% endfor %}
 
                   <div class="order_status flex f-ai" data-key="admin_register_customer">
-                    <input type="checkbox" name="admin_register_customer[status]" <?php echo (isset($admin_register_customer['status']) && $admin_register_customer['status'] ? 'checked' : ''); ?> value="1" >
+                    <input type="checkbox" name="admin_register_customer[status]" {% if admin_register_customer.status %}checked{% endif %} value="1" >
                     <span class="checkbox"></span>
-                    <span><?php echo $text_register; ?></span>
+                    <span>{{ text_register }}</span>
                   </div>
                 </div>
 
                 <div class="order_status_forms col-sm-10">
                   <div class="order_status_form hidden" data-key="admin_new_order">
                       <div class="head flex f-wrap">
-                        <?php foreach($short_codes as $code => $name){ ?>
-                          <a href="#" data-code="<?php echo $code; ?>" class="copy"><?php echo $name; ?></a>
-                        <?php } ?>
+                        {% for code, name in short_codes %}
+                          <a href="#" data-code="{{ code }}" class="copy">{{ name }}</a>
+                        {% endfor %}
                       </div>
-                      <textarea name="admin_new_order[message]" placeholder="<?php echo $text_new_order; ?>" class="form-control first"><?php echo (isset($admin_new_order['message']) ? $admin_new_order['message'] : ''); ?></textarea>
+                      <textarea name="admin_new_order[message]" placeholder="{{ text_new_order }}" class="form-control first">{{ admin_new_order.message }}</textarea>
                       <textarea readonly class="form-control last"></textarea>
                   </div>
 
-
-                  <?php foreach($order_statuses as $order_status){ ?>
-                    <?php $key = "admin_order_status_" . $order_status['order_status_id']; ?>
-                    <div class="order_status_form hidden" data-key="<?php echo $key; ?>">
+                  {% for order_status in order_statuses %}
+                    {% set key = "admin_order_status_" ~ order_status.order_status_id %}
+                    {% set info = data[key] %}
+                    <div class="order_status_form hidden" data-key="{{ key }}">
                       <div class="head flex f-wrap">
-                        <?php foreach($short_codes as $code => $name){ ?>
-                          <a href="#" data-code="<?php echo $code; ?>" class="copy"><?php echo $name; ?></a>
-                        <?php } ?>
+                        {% for code, name in short_codes %}
+                          <a href="#" data-code="{{ code }}" class="copy">{{ name }}</a>
+                        {% endfor %}
                       </div>
-                      <textarea name="<?php echo $key; ?>[message]" placeholder="<?php echo $order_status['name']; ?>" class="form-control first"><?php echo (isset(${$key}['message']) ? ${$key}['message'] : ''); ?></textarea>
+                      <textarea name="{{ key }}[message]" placeholder="{{ order_status.name }}" class="form-control first">{{ info.message }}</textarea>
                       <textarea readonly class="form-control last"></textarea>
                     </div>
-                  <?php } ?>
+                  {% endfor %}
 
                   <div class="order_status_form hidden" data-key="admin_register_customer">
                     <div class="head flex f-wrap">
-                      <?php foreach($short_codes_customer as $code => $name){ ?>
-                        <a href="#" data-code="<?php echo $code; ?>" class="copy"><?php echo $name; ?></a>
-                      <?php } ?>
+                      {% for code, name in short_codes_customer %}
+                        <a href="#" data-code="{{ code }}" class="copy">{{ name }}</a>
+                      {% endfor %}
                     </div>
-                    <textarea name="admin_register_customer[message]" placeholder="<?php echo $text_register; ?>" class="form-control first"><?php echo (isset($admin_register_customer['message']) ? $admin_register_customer['message'] : ''); ?></textarea>
+                    <textarea name="admin_register_customer[message]" placeholder="{{ text_register }}" class="form-control first">{{ admin_register_customer.message }}</textarea>
                     <textarea readonly class="form-control last"></textarea>
                   </div>
                 </div>
@@ -272,6 +274,7 @@ span.checkbox {
   display: inline-block;
   width: 20px;
   height: 20px;
+  min-width: 20px;
   min-height: 20px !important;
   margin-right: 8px;
   border: 1px solid gainsboro;
@@ -323,9 +326,9 @@ var form = {
     str = str.replace(/\{DATE\}/g, '20-01-2019');
     str = str.replace(/\{TIME\}/g, '16:33');
     str = str.replace(/\{SUM\}/g, '4356.6');
-    str = str.replace(/\{NAME\}/g, '<?php echo $replace_default_name; ?>');
-    str = str.replace(/\{STATUS\}/g, '<?php echo $replace_default_status; ?>');
-    str = str.replace(/\{COMMENT\}/g, '<?php echo $replace_default_comment; ?>');
+    str = str.replace(/\{NAME\}/g, '{{ replace_default_name }}');
+    str = str.replace(/\{STATUS\}/g, '{{ replace_default_status }}');
+    str = str.replace(/\{COMMENT\}/g, '{{ replace_default_comment }}');
     str = str.replace(/\{PASSWORD\}/g, 'vasya052016');
     str = str.replace(/\{LOGIN\}/g, 'vasya052016@email.ru');
     $form.parent().find('.last').val(str);
@@ -412,7 +415,7 @@ function addAlertSuccess(text, timeLife){
 $(document).on('click','.copy',function(e){
   e.preventDefault();
 	copy($(this));
-  addAlertSuccess('<?php echo $text_copied; ?>', 1000);
+  addAlertSuccess('{{ text_copied }}', 1000);
   form.insert($(this).data('code'));
 });
 
@@ -450,4 +453,4 @@ $('[name="provider"]').change();
 
 </script>
 
-<?php echo $footer; ?>
+{{ footer }}

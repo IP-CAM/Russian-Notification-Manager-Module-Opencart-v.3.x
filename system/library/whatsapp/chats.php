@@ -66,6 +66,10 @@ class Chats{
 
         $sql .= " WHERE `chat_id` = '".self::$db->escape($data['chat_id'])."'";
 
+        // if(isset($data['user_id'])){
+        //     $sql .= " AND `user_id` = '".(int)$data['user_id']."'";
+        // }
+
         $chat = self::$db->query($sql)->row;
 
         self::fill($chat);
@@ -76,6 +80,10 @@ class Chats{
     public static function getChats($data){
         self::init();
         $sql = "SELECT * FROM `" . DB_PREFIX . "notification_chats` WHERE id > 0";
+
+        // if(isset($data['user_id'])){
+        //     $sql .= " AND user_id = '".(int)$data['user_id']."'";
+        // }
 
         $sql .= " ORDER BY date_modified DESC";
 
@@ -94,6 +102,10 @@ class Chats{
     public static function total($data){
         self::init();
         $sql = "SELECT COUNT(*) as total FROM `" . DB_PREFIX . "notification_chats` WHERE id > 0";
+
+        // if(isset($data['user_id'])){
+        //     $sql .= " AND user_id = '".(int)$data['user_id']."'";
+        // }
 
         return self::$db->query($sql)->row['total'];
     }

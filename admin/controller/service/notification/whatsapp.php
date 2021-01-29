@@ -16,7 +16,7 @@ class ControllerServiceNotificationWhatsapp extends Controller {
 
         $this->fillLang($data);
 
-        $data['token'] = $this->session->data['token'];
+        $data['user_token'] = $this->session->data['user_token'];
 
         $data['chats'] = [];
 
@@ -44,7 +44,7 @@ class ControllerServiceNotificationWhatsapp extends Controller {
             $data['chats'][] = $chat;
         }
 
-        $data['back'] = $this->url->link('service/notification/client', 'token=' . $this->session->data['token'], true);
+        $data['back'] = $this->url->link('service/notification/client', 'user_token=' . $this->session->data['user_token'], true);
 
         $data['time'] = time();
 

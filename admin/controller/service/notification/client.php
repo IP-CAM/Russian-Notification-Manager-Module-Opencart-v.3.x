@@ -35,23 +35,28 @@ class ControllerServiceNotificationClient extends Controller {
 
         $this->fillLang($data);
 
+        $data['provider_info'] = $data['provider_info'] ? json_encode($data['provider_info']) : '{}';
+        $data['provider_form'] = $data['provider_form'] ? json_encode($data['provider_form']) : false;
+
 		$this->document->setTitle($data['heading_title']);
         
         $this->breadcrumbs($data);
 
         $data['providers'] = array();
         
-        $data['token'] = $this->session->data['token'];
+        $data['user_token'] = $this->session->data['user_token'];
 
-        $data['action'] = $this->url->link('service/notification/client', 'token=' . $this->session->data['token'], true);
+        $data['action'] = $this->url->link('service/notification/client', 'user_token=' . $this->session->data['user_token'], true);
 
-		$data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', true);
+		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true);
 
 		$files = glob(DIR_SYSTEM . 'notifprovider/*.php');
 
 		foreach ($files as $file) {
 			$data['providers'][] =  basename($file, '.php');
         }
+
+        $data['data'] = $data;
         
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -75,8 +80,7 @@ class ControllerServiceNotificationClient extends Controller {
                 $data[$key] = $this->setting->get($key);
             }
         }
-
-        $data['open_whatsapp'] = $this->url->link('service/notification/whatsapp', 'token='.$this->session->data['token']);
+        $data['open_whatsapp'] = $this->url->link('service/notification/whatsapp', 'user_token='.$this->session->data['user_token']);
     }
 
     public function fillLang(&$data){
@@ -97,17 +101,17 @@ class ControllerServiceNotificationClient extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_extension'),
-			'href' => $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', true)
+			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('service/notification/client', 'token=' . $this->session->data['token'], true)
+			'href' => $this->url->link('service/notification/client', 'user_token=' . $this->session->data['user_token'], true)
 		);
     }
 
@@ -118,7 +122,7 @@ class ControllerServiceNotificationClient extends Controller {
 
         $this->session->data['success'] = $this->language->get('text_success');
 
-        $this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=module', true));
+        $this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true));
     }
 
     public function validate(){
@@ -135,14 +139,14 @@ class ControllerServiceNotificationClient extends Controller {
 
         $this->load->model('user/user_group');
 
-        $this->load->model('extension/event');
+        $this->load->model('setting/event');
 
         $this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'service/notification/client');
         $this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'service/notification/client');
 
         $this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'service/notification/whatsapp');
         $this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'service/notification/whatsapp');
-
+        
         $this->removeOldModule();
     }
 
@@ -150,10 +154,10 @@ class ControllerServiceNotificationClient extends Controller {
         $this->load->model('service/notification/client');
         $this->model_service_notification_client->uninstall();
 
-        $this->load->model('extension/event');
-        $this->model_extension_event->deleteEvent('before_order_history');
+        $this->load->model('setting/event');
+        $this->model_setting_event->deleteEvent('before_order_history');
 
-        $this->model_extension_event->deleteEvent('after_add_customer');
+        $this->model_setting_event->deleteEvent('after_add_customer');
     }
 
     public function removeOldModule(){
@@ -163,13 +167,15 @@ class ControllerServiceNotificationClient extends Controller {
             'admin/language/ru-ru/extension/module/alertclient.php',
             'admin/model/extension/module/alertclient.php',
             'catalog/controller/extension/module/alertclient.php',
+            'catalog/controller/smsgate/alertclient.php',
             'catalog/model/extension/module/alertclient.php',
-            'admin/view/template/extension/module/alertclient/alertclient.tpl',
-            'admin/view/template/extension/module/alertclient/allsends.tpl',
+            'admin/view/template/extension/module/alertclient/alertclient.twig',
+            'admin/view/template/extension/module/alertclient/allsends.twig',
             'system/smsgate/alphasms.php',
             'system/smsgate/atomic.php',
-            'admin/view/template/extension/module/alertclient/dialog.tpl',
+            'admin/view/template/extension/module/alertclient/dialog.twig',
             'system/smsgate/intisSMS.php',
+            'system/library/sms.php',
             'system/smsgate/smsaero.php',
             'system/smsgate/smsc.php',
             'system/smsgate/smsint.php',

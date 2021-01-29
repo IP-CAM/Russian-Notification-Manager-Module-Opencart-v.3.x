@@ -32,6 +32,7 @@ final class Smsint{
 		$this->curlGet($url);
 	}
 
+	
 	private function curlGet($url) {
 		$options = array(
 		  CURLOPT_URL => $url,
