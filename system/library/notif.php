@@ -23,7 +23,7 @@ class Notif {
 
 			$this->data = $this->getSetting('provider_info');
 
-			$this->include();
+			$this->_include();
 
 			$class = 'Notif\\' . $this->provider;
 
@@ -48,7 +48,7 @@ class Notif {
         return json_decode($this->db->query($sql)->row['data'], 1);
 	}
 	
-	private function include(){
+	private function _include(){
 		if (file_exists(DIR_SYSTEM . 'notifprovider/' . $this->provider . '.php')) {
 			require_once(DIR_SYSTEM . 'notifprovider/' . $this->provider . '.php');
 		} else {
