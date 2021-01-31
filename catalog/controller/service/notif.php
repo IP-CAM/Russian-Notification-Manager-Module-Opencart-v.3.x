@@ -22,6 +22,8 @@ class ControllerServiceNotif extends Controller {
 
         $order_info = $this->model_checkout_order->getOrder($order_id);
 
+        $order_info['comment'] = $comment;
+
 		if((int)$order_info['order_status_id'] === (int)$order_status_id){
 			return false;
         }
